@@ -1,29 +1,19 @@
-package com.bridgelabz.fundoo.configure;
+package com.bridgelabz.bookstore.configure;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import javax.persistence.EntityManagerFactory;
 
 @Configuration
+@EnableJpaRepositories("com.bridgelabz.bookstore.repository")
 public class ApplicationConfiguration {
-	
-	@Bean
-	public PasswordEncoder getPasswordEncoder()
-	{
-		return new BCryptPasswordEncoder();
-}
-	
-	
-	
+
 	@Bean
 	public ModelMapper modelMapper() {
 	    return new ModelMapper();
 	}
-	
-	
-	
-	
 	
 }

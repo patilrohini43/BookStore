@@ -1,31 +1,26 @@
-package com.bridgelabz.fundoo.exception;
+package com.bridgelabz.bookstore.exception;
 
-public class UserException extends RuntimeException {
+public class BookException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	int errorCode;
 	String msg;
 	
-	public UserException(String errormessage) {
+	public BookException(String errormessage) {
 		super(errormessage);
 	}
-	public UserException(int errorCode,String msg)
+	public BookException(int errorCode, String msg)
 	{
 		this(msg);
 		this.errorCode=errorCode;
 	}
-	public UserException(int errorCode, String msg, Throwable throwable)
+	public BookException(int errorCode, String msg, Throwable throwable)
 	{
 		super(msg, throwable);
 		this.errorCode=errorCode;
 	}
-	
-	
-	
+
 	public int getErrorCode() {
 		return errorCode;
 	}
