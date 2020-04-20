@@ -32,8 +32,6 @@ public class OrderService implements IOrderService {
     @Autowired
     BookRepository bookRepository;
 
-
-
     @Override
     public Response addOrder(OrderDto orderDto) {
         Order order = mapper.map(orderDto, Order.class);
@@ -48,7 +46,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Response addBookToCart(Long bookId, int quantity) {
+    public Response placeOrder(Long bookId, int quantity) {
         Book book=bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"book Id not found"));
         OrderBook orderBook = new OrderBook(book);
         Order order=new Order();

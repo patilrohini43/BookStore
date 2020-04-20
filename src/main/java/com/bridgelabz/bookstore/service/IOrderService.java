@@ -5,5 +5,5 @@ import com.bridgelabz.bookstore.model.Response;
 
 public interface IOrderService {
     Response addOrder(OrderDto order);
-    Response addBookToCart(Long bookId, int quantity);
+    Response placeOrder(Long bookId, int quantity);
 }

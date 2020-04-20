@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService implements IBookService {
@@ -70,6 +71,21 @@ public class BookService implements IBookService {
     public Book getBookById(Long bookId) {
         Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
         return book;
+    }
+
+    @Override
+    public Response addToCart(Long bookId) {
+        Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
+        book.setCartStatus(true);
+        bookRepository.save(book);
+        Response response1=new Response(200, environment.getProperty("book.success.message"));
+        return response1;
+    }
+
+    @Override
+    public List<Book> getAllCartList() {
+        List<Book> cartBook = bookRepository.findAll().stream().filter(data -> data.isCartStatus() == true).collect(Collectors.toList());
+        return cartBook;
     }
 
 }

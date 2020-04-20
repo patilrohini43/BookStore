@@ -48,6 +48,19 @@ public class BookStoreController {
         Book bookList= iBookService.getBookById(bookId);
         return bookList;
     }
+
+    @PutMapping("/addtoCart/{bookId}")
+    public ResponseEntity<Response> addToCart(@PathVariable(name = "bookId") Long bookId) {
+        Response response= iBookService.addToCart(bookId);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getAllCart")
+    public List<Book> getAllCartList() {
+        return iBookService.getAllCartList();
+    }
+
     @DeleteMapping("/deleteBook/{bookId}")
     public ResponseEntity<Response> deleteBook(@PathVariable(name = "bookId") Long bookId) {
         Response response= iBookService.deleteBook(bookId);

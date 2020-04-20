@@ -26,7 +26,7 @@ public class OrderController {
 
     @PostMapping("/addBookToCard/{bookId}/{quantity}")
     public ResponseEntity<Response> addBookToCart(@PathVariable(name = "bookId") Long bookId,@PathVariable int quantity) {
-        Response response= iOrderService.addBookToCart(bookId,quantity);
+        Response response= iOrderService.placeOrder(bookId,quantity);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

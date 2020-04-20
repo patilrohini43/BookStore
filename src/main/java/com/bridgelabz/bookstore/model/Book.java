@@ -29,6 +29,9 @@ public class Book {
         @Column(name = "bookDetail")
         private String bookDetail;
 
+        @Column(name="cartStatus")
+        private boolean cartStatus;
+
         @Column(name = "image")
         private String image;
 
@@ -94,5 +97,13 @@ public class Book {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isCartStatus() {
+        return cartStatus;
+    }
+
+    public void setCartStatus(boolean cartStatus) {
+        this.cartStatus = cartStatus;
     }
 }

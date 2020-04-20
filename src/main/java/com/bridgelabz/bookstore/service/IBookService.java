@@ -13,4 +13,8 @@ public interface IBookService {
     Book searchBooksByName(String bookName);
     Response deleteBook(Long bookId);
     Book getBookById(Long bookId);
+
+    Response addToCart(Long bookId);
+
+    List<Book> getAllCartList();
 }
