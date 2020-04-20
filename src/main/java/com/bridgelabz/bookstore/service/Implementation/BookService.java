@@ -78,7 +78,7 @@ public class BookService implements IBookService {
         Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
         book.setCartStatus(true);
         bookRepository.save(book);
-        Response response1=new Response(200, environment.getProperty("book.success.message"));
+        Response response1=new Response(200, environment.getProperty("book.success.cart.message"));
         return response1;
     }
 
@@ -86,6 +86,15 @@ public class BookService implements IBookService {
     public List<Book> getAllCartList() {
         List<Book> cartBook = bookRepository.findAll().stream().filter(data -> data.isCartStatus() == true).collect(Collectors.toList());
         return cartBook;
+    }
+
+    @Override
+    public Response removeFromCart(Long bookId) {
+        Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
+        book.setCartStatus(false);
+        bookRepository.save(book);
+        Response response1=new Response(200, environment.getProperty("book.remove.cart.message"));
+        return response1;
     }
 
 }

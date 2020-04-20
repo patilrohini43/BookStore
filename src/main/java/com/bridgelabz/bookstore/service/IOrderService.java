@@ -6,4 +6,6 @@ import com.bridgelabz.bookstore.model.Response;
 public interface IOrderService {
     Response addOrder(OrderDto order);
     Response placeOrder(Long bookId, int quantity);
+
+    Response removeOrder(Long bookId);
 }

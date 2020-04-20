@@ -17,4 +17,6 @@ public interface IBookService {
     Response addToCart(Long bookId);
 
     List<Book> getAllCartList();
+
+    Response removeFromCart(Long bookId);
 }

@@ -17,16 +17,15 @@ public class OrderController {
     @Autowired
     IOrderService iOrderService;
 
-    @PostMapping("/addBook")
-    public ResponseEntity<Response> addBook(@RequestBody OrderDto orderDto){
-        Response response= iOrderService.addOrder(orderDto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @PostMapping("/placeOrder/{bookId}/{quantity}")
+    public ResponseEntity<Response> placeOrder(@PathVariable(name = "bookId") Long bookId,@PathVariable int quantity) {
+        Response response= iOrderService.placeOrder(bookId,quantity);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-
-    @PostMapping("/addBookToCard/{bookId}/{quantity}")
-    public ResponseEntity<Response> addBookToCart(@PathVariable(name = "bookId") Long bookId,@PathVariable int quantity) {
-        Response response= iOrderService.placeOrder(bookId,quantity);
+    @DeleteMapping("/removeOrder/{bookId}/{quantity}")
+    public ResponseEntity<Response> removeOrder(@PathVariable(name = "bookId") Long bookId) {
+        Response response= iOrderService.removeOrder(bookId);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

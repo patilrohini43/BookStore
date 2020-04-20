@@ -56,6 +56,16 @@ public class OrderService implements IOrderService {
         book.getOrders().add(orderBook);
         orderRepository.save(order);
         bookRepository.save(book);
+        Response response1=new Response(200, environment.getProperty("book.success.message"));
+        return response1;
+    }
+
+    @Override
+    public Response removeOrder(Long bookId) {
+        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"book Id not found"));
+        OrderBook orderBook = new OrderBook(book);
+        book.getOrders().remove(orderBook);
+        bookRepository.save(book);
         Response response1=new Response(200, environment.getProperty("book.success.delete.message"));
         return response1;
     }

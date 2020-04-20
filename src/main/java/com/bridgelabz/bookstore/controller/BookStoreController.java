@@ -55,6 +55,12 @@ public class BookStoreController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @PutMapping("/deleteFromCart/{bookId}")
+    public ResponseEntity<Response> removeFromCart(@PathVariable(name = "bookId") Long bookId) {
+        Response response= iBookService.removeFromCart(bookId);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
 
     @GetMapping("/getAllCart")
     public List<Book> getAllCartList() {
