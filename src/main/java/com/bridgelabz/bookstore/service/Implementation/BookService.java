@@ -3,8 +3,6 @@ package com.bridgelabz.bookstore.service.Implementation;
 import com.bridgelabz.bookstore.dto.BookDto;
 import com.bridgelabz.bookstore.exception.BookException;
 import com.bridgelabz.bookstore.model.Book;
-import com.bridgelabz.bookstore.model.Order;
-import com.bridgelabz.bookstore.model.OrderBook;
 import com.bridgelabz.bookstore.model.Response;
 import com.bridgelabz.bookstore.repository.BookRepository;
 import com.bridgelabz.bookstore.service.IBookService;
@@ -12,9 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

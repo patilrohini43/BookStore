@@ -27,6 +27,11 @@ public class OrderBook implements Serializable {
         this.book=book;
     }
 
+    public OrderBook(Order order) {
+        this.order=order;
+    }
+
+
     public Order getOrder() {
         return order;
     }

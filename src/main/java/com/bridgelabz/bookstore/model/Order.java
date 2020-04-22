@@ -19,7 +19,7 @@ public class Order implements Serializable {
     private Long orderId;
 
     @Column(name = "status")
-    private String status;
+    private boolean status;
 
     @Column(name = "date")
     private Date date;
@@ -29,6 +29,10 @@ public class Order implements Serializable {
 
     @Column(name = "quantity")
     private int quantity;
+
+    @Column(name = "addressId")
+    private Long addressId;
+
 
     @OneToMany(
             mappedBy = "order",
@@ -73,6 +77,14 @@ public class Order implements Serializable {
         this.user = user;
     }
 
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
     public long getId() {
         return orderId;
     }
@@ -81,11 +93,13 @@ public class Order implements Serializable {
         this.orderId = orderId;
     }
 
-    public String getStatus() {
+
+
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

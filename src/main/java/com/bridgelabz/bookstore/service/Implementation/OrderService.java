@@ -1,27 +1,37 @@
 package com.bridgelabz.bookstore.service.Implementation;
 
-import com.bridgelabz.bookstore.dto.OrderDto;
+import com.bridgelabz.bookstore.dto.AddressDto;
 import com.bridgelabz.bookstore.exception.BookException;
-import com.bridgelabz.bookstore.model.Book;
-import com.bridgelabz.bookstore.model.Order;
-import com.bridgelabz.bookstore.model.OrderBook;
-import com.bridgelabz.bookstore.model.Response;
+import com.bridgelabz.bookstore.model.*;
+import com.bridgelabz.bookstore.repository.AddressRepository;
 import com.bridgelabz.bookstore.repository.BookRepository;
 import com.bridgelabz.bookstore.repository.OrderRepository;
+import com.bridgelabz.bookstore.repository.UserRepository;
 import com.bridgelabz.bookstore.service.IOrderService;
+import com.bridgelabz.bookstore.utility.UserToken;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService implements IOrderService {
 
     @Autowired
     OrderRepository orderRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
 
     @Autowired
     private Environment environment;
@@ -31,19 +41,6 @@ public class OrderService implements IOrderService {
 
     @Autowired
     BookRepository bookRepository;
-
-    @Override
-    public Response addOrder(OrderDto orderDto) {
-        Order order = mapper.map(orderDto, Order.class);
-        for (OrderBook orderBook : order.getBooks()) {
-            orderBook.setOrder(order);
-            orderBook.getBook().getOrders().add(orderBook);
-        }
-        order.setDate(order.getDate());
-        orderRepository.save(order);
-        Response response=new Response(200, environment.getProperty("book.success.message"));
-        return response;
-    }
 
     @Override
     public Response placeOrder(Long bookId, int quantity) {
@@ -60,13 +57,70 @@ public class OrderService implements IOrderService {
         return response1;
     }
 
+
     @Override
-    public Response removeOrder(Long bookId) {
-        Book book=bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"book Id not found"));
-        OrderBook orderBook = new OrderBook(book);
-        book.getOrders().remove(orderBook);
-        bookRepository.save(book);
+    public Response orderItem(String token,Long orderId,Long addressId) {
+        Long userID = UserToken.tokenVerify(token);
+        System.out.println(userID);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
+        Order order=orderRepository.findById(orderId).orElseThrow(()->new BookException(400,"Order Id not found"));
+        List<Order> orderList=orderRepository.findAll().stream().filter(order1 -> order1.getOrderId().equals(orderId)).collect(Collectors.toList());
+        double price = 0;
+        for(int i=0;i<orderList.size();i++){
+             price = order.getBooks().get(i).getBook().getPrice();
+            System.out.println(price);
+        }
+        double totalPrice = order.getQuantity() * price;
+        order.setUser(user);
+        order.setPrice(totalPrice);
+        order.setStatus(true);
+        order.setAddressId(addressId);
+        orderRepository.save(order);
+        Response response1=new Response(200, environment.getProperty("order.success.message"));
+        return response1;
+    }
+
+
+
+    @Override
+    public Response removeOrder(Long orderId) {
+        Order orderItem=orderRepository.findById(orderId).orElseThrow(()->new BookException(400,"book Id not found"));
+        OrderBook orderBook = new OrderBook(orderItem);
+        orderItem.getBooks().remove(orderBook);
+        orderRepository.delete(orderItem);
         Response response1=new Response(200, environment.getProperty("book.success.delete.message"));
         return response1;
+    }
+
+
+    @Override
+    public List<Address> addressListByOrderId(String token,Long orderId) {
+        Long userID = UserToken.tokenVerify(token);
+        System.out.println(userID);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
+        Order order=orderRepository.findById(orderId).orElseThrow(()->new BookException(400,"Order Id not found"));
+        return  order.getUser().getAddressList();
+    }
+
+    @Override
+    public List<Address> getAddressDetailById(String token, Long addressId) {
+        Long userID = UserToken.tokenVerify(token);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
+        List<Address> addressList=user.getAddressList();
+        List<Address> addressDetail = addressList.stream().filter(data -> data.getAddressId() == addressId).collect(Collectors.toList());
+        return addressDetail;
+    }
+
+    public List<OrderBook> orderIdWiseBookDetails(String token,Long orderId) {
+        Long userID = UserToken.tokenVerify(token);
+        System.out.println(userID);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
+        Order order=orderRepository.findById(orderId).orElseThrow(()->new BookException(400,"Order Id not found"));
+        System.out.println(order.getBooks());
+        return  order.getBooks();
     }
 }
