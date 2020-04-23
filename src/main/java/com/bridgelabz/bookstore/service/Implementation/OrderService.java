@@ -30,8 +30,8 @@ public class OrderService implements IOrderService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    AddressRepository addressRepository;
+//    @Autowired
+//    AddressRepository addressRepository;
 
     @Autowired
     private Environment environment;
@@ -77,7 +77,7 @@ public class OrderService implements IOrderService {
         order.setStatus(true);
         order.setAddressId(addressId);
         orderRepository.save(order);
-        Response response1=new Response(200, environment.getProperty("order.success.message"));
+        Response response1=new Response(200, environment.getProperty("order.success.message"), Long.toString(order.getOrderId()));
         return response1;
     }
 
@@ -105,22 +105,13 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Address> getAddressDetailById(String token, Long addressId) {
-        Long userID = UserToken.tokenVerify(token);
-        User user=userRepository.findById(userID)
-                .orElseThrow(() -> new BookException(401, "token.error"));
-        List<Address> addressList=user.getAddressList();
-        List<Address> addressDetail = addressList.stream().filter(data -> data.getAddressId() == addressId).collect(Collectors.toList());
-        return addressDetail;
-    }
-
-    public List<OrderBook> orderIdWiseBookDetails(String token,Long orderId) {
+    public List<Order> orderIdWiseBookDetails(String token,Long orderId) {
         Long userID = UserToken.tokenVerify(token);
         System.out.println(userID);
         User user=userRepository.findById(userID)
                 .orElseThrow(() -> new BookException(401, "token.error"));
         Order order=orderRepository.findById(orderId).orElseThrow(()->new BookException(400,"Order Id not found"));
-        System.out.println(order.getBooks());
-        return  order.getBooks();
+        List<Order> orderList=orderRepository.findAll().stream().filter(data->data.getOrderId()==orderId).collect(Collectors.toList());
+        return orderList;
     }
 }

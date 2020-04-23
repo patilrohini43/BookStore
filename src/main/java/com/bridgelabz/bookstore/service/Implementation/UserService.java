@@ -36,12 +36,14 @@ public class UserService implements IUserService {
 
     @Override
     public Response registerUser(UserDto userDto) {
-       userRepository.findUserByEmail(userDto.getEmail())
-                .orElseThrow(() -> new BookException(401, "Already Exist"));
+       User userExist=userRepository.findUserByEmail(userDto.getEmail());
+       if (userExist!=null){
+           throw new BookException(401, "Already Exist");
+       }
         User user = mapper.map(userDto, User.class);
         userRepository.save(user);
         String url=UserToken.createToken(user.getUserId());
-        Email.sendEmail("patilrohini43@gmail.com","Verification Mail",url);
+        Email.sendEmail(userDto.getEmail(),"Verification Mail",url);
         Response response=new Response(200, environment.getProperty("user.success.message"));
         return response;
     }
@@ -65,8 +67,10 @@ public class UserService implements IUserService {
 
     @Override
     public Response login(LoginDto loginDto) {
-        User user=userRepository.findUserByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new BookException(401, "User Not Found"));
+        User user=userRepository.findUserByEmail(loginDto.getEmail());
+       if(user==null){
+           throw new BookException(401, "User Not Found");
+       }
         if(user.isStatus()){
             if(user.getPassword().equals(loginDto.getPassword())){
                 String token= UserToken.createToken(user.getUserId());
@@ -93,6 +97,38 @@ public class UserService implements IUserService {
         Response response1=new Response(200, environment.getProperty("customer.success.message"));
         return response1;
     }
+
+
+    @Override
+    public Response updateCustomerAddress(String token, Long addressId, AddressDto addressDto) {
+        Long userID = UserToken.tokenVerify(token);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
+        Address address=addressRepository.findById(addressId).orElseThrow(() -> new BookException(401, "Address Id not Found"));
+        address.setCity(addressDto.getCity());
+        address.setAddress(addressDto.getAddress());
+        address.setLandMark(addressDto.getLandMark());
+        address.setLocality(addressDto.getLocality());
+        address.setMobileNumber(addressDto.getMobileNumber());
+        address.setPinCode(addressDto.getPinCode());
+        address.setType(addressDto.getType());
+        user.getAddressList().add(address);
+        address.setUser(user);
+        addressRepository.save(address);
+        Response response1=new Response(200, environment.getProperty("customer.success.update.message"));
+        return response1;
+    }
+
+    @Override
+    public Address getData(String token, Long addressId) {
+        Long userID = UserToken.tokenVerify(token);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
+        Address address=addressRepository.findById(addressId).orElseThrow(() -> new BookException(401, "Address Id not Found"));
+        System.out.println(address.getMobileNumber());
+        return address;
+    }
+
 
 
 

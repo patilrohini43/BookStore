@@ -61,7 +61,6 @@ public class BookStoreController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-
     @GetMapping("/getAllCart")
     public List<Book> getAllCartList() {
         return iBookService.getAllCartList();

@@ -39,11 +39,6 @@ public class OrderController {
         return iOrderService.addressListByOrderId(token,orderId);
     }
 
-    @GetMapping("/{token}")
-    public List<Address> getAddressDetailById(@PathVariable String token,@RequestParam Long addressId) {
-        return iOrderService.getAddressDetailById(token,addressId);
-    }
-
     @PostMapping("/orderPlace/{token}")
     public ResponseEntity<Response> orderItem(@PathVariable String token,@RequestParam Long orderId,@RequestParam Long addressId){
         Response response= iOrderService.orderItem(token,orderId,addressId);
@@ -51,7 +46,7 @@ public class OrderController {
     }
 
     @GetMapping("/list/{token}")
-    public List<OrderBook> bookorder(@PathVariable String token, @RequestParam Long orderId) {
+    public List<Order> bookorder(@PathVariable String token, @RequestParam Long orderId) {
         return iOrderService.orderIdWiseBookDetails(token,orderId);
     }
 }

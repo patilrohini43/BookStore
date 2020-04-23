@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "Address")
-@IdClass(Address.class)
 public class Address implements Serializable {
 
     @Id
@@ -37,7 +36,6 @@ public class Address implements Serializable {
     @Column(name = "type")
     private String type;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId",nullable = false)
     private User user;

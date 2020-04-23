@@ -33,7 +33,6 @@ public class Order implements Serializable {
     @Column(name = "addressId")
     private Long addressId;
 
-
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL
