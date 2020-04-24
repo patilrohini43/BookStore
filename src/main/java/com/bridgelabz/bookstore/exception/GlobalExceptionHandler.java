@@ -23,4 +23,11 @@ public class GlobalExceptionHandler {
 	    return new ResponseEntity<Response>(status,HttpStatus.OK);
 	  }
 
+	@ExceptionHandler(UserException.class)
+	public final ResponseEntity<Response> userException(UserException e) {
+
+		Response status=new Response(400,e.getMessage());
+		return new ResponseEntity<Response>(status,HttpStatus.OK);
+	}
+
 }

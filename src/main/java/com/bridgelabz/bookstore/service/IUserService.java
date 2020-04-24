@@ -5,6 +5,7 @@ import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
 import com.bridgelabz.bookstore.model.Address;
 import com.bridgelabz.bookstore.model.Response;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface IUserService {
     Response registerUser(UserDto userDto);

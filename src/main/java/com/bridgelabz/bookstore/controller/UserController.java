@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -20,7 +23,7 @@ public class UserController {
     IUserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> registration(@RequestBody UserDto userDto){
+    public ResponseEntity<Response> registration(@RequestBody UserDto userDto) throws IOException {
         Response response=userService.registerUser(userDto);
     return new ResponseEntity<>(response, HttpStatus.OK);
     }

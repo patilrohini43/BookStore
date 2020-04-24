@@ -4,8 +4,8 @@ import com.bridgelabz.bookstore.dto.AddressDto;
 import com.bridgelabz.bookstore.dto.LoginDto;
 import com.bridgelabz.bookstore.dto.UserDto;
 import com.bridgelabz.bookstore.exception.BookException;
+import com.bridgelabz.bookstore.exception.UserException;
 import com.bridgelabz.bookstore.model.Address;
-import com.bridgelabz.bookstore.model.Book;
 import com.bridgelabz.bookstore.model.Response;
 import com.bridgelabz.bookstore.model.User;
 import com.bridgelabz.bookstore.repository.AddressRepository;
@@ -17,6 +17,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.util.UUID;
 
 @Service
 public class UserService implements IUserService {
@@ -38,7 +42,7 @@ public class UserService implements IUserService {
     public Response registerUser(UserDto userDto) {
        User userExist=userRepository.findUserByEmail(userDto.getEmail());
        if (userExist!=null){
-           throw new BookException(401, "Already Exist");
+           throw new UserException(401, "Already Exist");
        }
         User user = mapper.map(userDto, User.class);
         userRepository.save(user);
@@ -55,7 +59,7 @@ public class UserService implements IUserService {
         Long userID = UserToken.tokenVerify(token);
         System.out.println(userID);
         User user=userRepository.findById(userID)
-                .orElseThrow(() -> new BookException(401, "token.error"));
+                .orElseThrow(() -> new UserException(401, "token.error"));
 
         user.setStatus(true);
         userRepository.save(user);
@@ -69,7 +73,7 @@ public class UserService implements IUserService {
     public Response login(LoginDto loginDto) {
         User user=userRepository.findUserByEmail(loginDto.getEmail());
        if(user==null){
-           throw new BookException(401, "User Not Found");
+           throw new UserException(401, "User Not Found");
        }
         if(user.isStatus()){
             if(user.getPassword().equals(loginDto.getPassword())){
@@ -77,9 +81,9 @@ public class UserService implements IUserService {
                 Response response=new Response(200,"Login Successfully",token);
                 return response;
             }
-            throw new BookException(405,"passWord not match");
+            throw new UserException(405,"passWord not match");
         }
-        throw new BookException(405,"need to verfiy token");
+        throw new UserException(405,"need to verfiy token");
     }
 
     @Override
@@ -87,7 +91,7 @@ public class UserService implements IUserService {
         Long userID = UserToken.tokenVerify(token);
         System.out.println(userID);
         User user=userRepository.findById(userID)
-                .orElseThrow(() -> new BookException(401, "token.error"));
+                .orElseThrow(() -> new UserException(401, "User Id not found"));
         Address address = mapper.map(addressDto, Address.class);
         address.setUser(user);
         user.getAddressList().add(address);

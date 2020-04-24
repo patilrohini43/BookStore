@@ -42,9 +42,6 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.el/javax.el-api
     compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
 
-
-
-
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }

@@ -5,7 +5,6 @@ public class BookDto {
     private String author;
     private double price;
     private String bookDetail;
-    private String image;
 
     public String getBookName() {
         return bookName;
@@ -29,14 +28,6 @@ public class BookDto {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getBookDetail() {
