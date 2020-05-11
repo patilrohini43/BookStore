@@ -13,12 +13,9 @@ public interface IBookService {
 
     Response addBook(BookDto bookDto, MultipartFile file) throws IOException;
     List<Book> getBookList();
-    Book searchBooksByName(String bookName);
+    List<Book> searchBooksByName(String bookName);
     Response deleteBook(Long bookId);
     Book getBookById(Long bookId);
-    Response addToCart(Long bookId);
-    List<Book> getAllCartList();
-    Response removeFromCart(Long bookId);
-
     List<Resource> getBookListImages();
+    Resource getBookImages(Long bookId);
 }

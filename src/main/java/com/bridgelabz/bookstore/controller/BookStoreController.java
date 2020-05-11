@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @PropertySource("classpath:message.properties")
 @RequestMapping(value = "/bookname")
+@CrossOrigin(origins="http://localhost:3000")
 public class BookStoreController {
 
     @Autowired
@@ -46,9 +47,15 @@ public class BookStoreController {
         return iBookService.getBookListImages();
     }
 
+    @GetMapping("/bookListImages/{bookId}")
+    public Resource getBookListImages(@PathVariable(name = "bookId") Long bookId){
+        iBookService.getBookImages(bookId);
+        return   iBookService.getBookImages(bookId);
+    }
+
 
     @GetMapping("/searchBook/{bookName}")
-    public Book searchBooksByName(@PathVariable(name ="bookName") String bookName)
+    public List<Book> searchBooksByName(@PathVariable(name ="bookName") String bookName)
     {
         return iBookService.searchBooksByName(bookName);
     }
@@ -59,22 +66,6 @@ public class BookStoreController {
         return bookList;
     }
 
-    @PutMapping("/addtoCart/{bookId}")
-    public ResponseEntity<Response> addToCart(@PathVariable(name = "bookId") Long bookId) {
-        Response response= iBookService.addToCart(bookId);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    @PutMapping("/deleteFromCart/{bookId}")
-    public ResponseEntity<Response> removeFromCart(@PathVariable(name = "bookId") Long bookId) {
-        Response response= iBookService.removeFromCart(bookId);
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    @GetMapping("/getAllCart")
-    public List<Book> getAllCartList() {
-        return iBookService.getAllCartList();
-    }
 
     @DeleteMapping("/deleteBook/{bookId}")
     public ResponseEntity<Response> deleteBook(@PathVariable(name = "bookId") Long bookId) {

@@ -11,7 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.servlet.MultipartConfigElement;
 
 @Configuration
-@EnableJpaRepositories("com.bridgelabz.bookstore.repository")
+//@EnableJpaRepositories("com.bridgelabz.bookstore.repository")
 public class ApplicationConfiguration {
 
 	@Bean

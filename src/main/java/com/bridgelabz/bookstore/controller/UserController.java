@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
+@CrossOrigin(origins="http://localhost:3000")
 public class UserController {
 
     @Autowired
@@ -52,14 +54,14 @@ public class UserController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/{token}")
-    public Address getAddressIdWiseDetails(@PathVariable String token, @RequestParam Long addressId){
-        return  userService.getData(token,addressId);
+    @GetMapping("/addressList")
+    public List<Address> getAddressIdWiseDetails(@RequestHeader("token") String token){
+        return  userService.getData(token);
 
     }
 
-    @PutMapping("/{token}/{addressId}")
-    public ResponseEntity<Response> updateCustomerAddress(@PathVariable String token,@PathVariable Long addressId, @RequestBody AddressDto addressDto) {
+    @PutMapping("/{addressId}")
+    public ResponseEntity<Response> updateCustomerAddress(@RequestHeader("token") String token,@PathVariable Long addressId, @RequestBody AddressDto addressDto) {
         Response response= userService.updateCustomerAddress(token,addressId,addressDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

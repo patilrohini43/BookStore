@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -124,13 +125,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Address getData(String token, Long addressId) {
+    public  List<Address> getData(String token) {
         Long userID = UserToken.tokenVerify(token);
         User user=userRepository.findById(userID)
                 .orElseThrow(() -> new BookException(401, "token.error"));
-        Address address=addressRepository.findById(addressId).orElseThrow(() -> new BookException(401, "Address Id not Found"));
-        System.out.println(address.getMobileNumber());
-        return address;
+        List<Address> addressList=user.getAddressList();
+       // List<Address> address= (List<Address>) addressRepository.findAll();
+        return addressList;
     }
 
 

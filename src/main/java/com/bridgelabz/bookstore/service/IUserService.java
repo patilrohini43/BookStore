@@ -7,6 +7,8 @@ import com.bridgelabz.bookstore.model.Address;
 import com.bridgelabz.bookstore.model.Response;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface IUserService {
     Response registerUser(UserDto userDto);
     public Response verifyToken(String token);
@@ -17,5 +19,5 @@ public interface IUserService {
 
     Response updateCustomerAddress(String token, Long addressId, AddressDto addressDto);
 
-    Address getData(String token, Long addressId);
+    List<Address> getData(String token);
 }

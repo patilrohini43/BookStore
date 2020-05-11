@@ -52,8 +52,6 @@ public class BookService implements IBookService {
         String image = uuid.toString();
         Files.copy(file.getInputStream(), this.pathlocation.resolve(image),
                 StandardCopyOption.REPLACE_EXISTING);
-        System.out.println(image);
-        System.out.println(bookDto.toString());
      Book book = mapper.map(bookDto, Book.class);
      book.setImage(image);
      bookRepository.save(book);
@@ -79,11 +77,19 @@ public class BookService implements IBookService {
         return imageList;
     }
 
-    private Resource getImages(String fileName){
+    @Override
+    public Resource getBookImages(Long bookId) {
+        Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
+        return getImages(book.getImage());
+    }
+
+
+    public Resource getImages(String fileName){
         Path file = this.pathlocation.resolve(fileName);
         try {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
+                System.out.println(resource);
                 return resource;
             } else {
                 throw new UploadException(
@@ -95,13 +101,13 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Book searchBooksByName(String bookName) {
+    public List<Book> searchBooksByName(String bookName) {
       List<Book> bookList= bookRepository.findAll();
-      Book result = bookList.stream().
+      List<Book> result = bookList.stream().
                filter(book -> book.getBookName() != null)
               .filter(book -> book.getBookName().contains(bookName) || book.getBookName().equals(bookName))
-              .findAny()
-              .orElseThrow(()-> new BookException(400,"book not found"));
+              .collect(Collectors.toList());
+             // .orElseThrow(()-> new BookException(400,"book not found"));
       return result;
     }
 
@@ -117,30 +123,6 @@ public class BookService implements IBookService {
     public Book getBookById(Long bookId) {
         Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
         return book;
-    }
-
-    @Override
-    public Response addToCart(Long bookId) {
-        Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
-        book.setCartStatus(true);
-        bookRepository.save(book);
-        Response response1=new Response(200, environment.getProperty("book.success.cart.message"));
-        return response1;
-    }
-
-    @Override
-    public List<Book> getAllCartList() {
-        List<Book> cartBook = bookRepository.findAll().stream().filter(data -> data.isCartStatus() == true).collect(Collectors.toList());
-        return cartBook;
-    }
-
-    @Override
-    public Response removeFromCart(Long bookId) {
-        Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
-        book.setCartStatus(false);
-        bookRepository.save(book);
-        Response response1=new Response(200, environment.getProperty("book.remove.cart.message"));
-        return response1;
     }
 
 }
