@@ -30,4 +30,16 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<Response>(status,HttpStatus.OK);
 	}
 
+
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public final ResponseEntity<Response> handleDMSRESTException(MethodArgumentNotValidException e)
+	{
+		Response status=new Response(400,e.getMessage());
+
+		return new ResponseEntity<Response>(status,HttpStatus.OK);
+	}
+
+
+
 }

@@ -5,6 +5,7 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.util.unit.DataSize;
 
 import javax.persistence.EntityManagerFactory;
@@ -18,4 +19,10 @@ public class ApplicationConfiguration {
 	public ModelMapper modelMapper() {
 	    return new ModelMapper();
 	}
+
+
+//	@Bean
+//	public PageableHandlerMethodArgumentResolverCustomizer customize() {
+//		return p -> p.setOneIndexedParameters(true);
+//	}
 }

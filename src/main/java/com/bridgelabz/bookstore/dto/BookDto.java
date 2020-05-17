@@ -5,6 +5,7 @@ public class BookDto {
     private String author;
     private double price;
     private String bookDetail;
+    private int quantity;
 
     public String getBookName() {
         return bookName;
@@ -16,6 +17,14 @@ public class BookDto {
 
     public String getAuthor() {
         return author;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public void setAuthor(String author) {

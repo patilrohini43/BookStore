@@ -1,12 +1,21 @@
 package com.bridgelabz.bookstore.dto;
 
 
-public class UserDto {
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+@Validated
+public class UserDto {
+    @NotNull(message="Can not be null")
+    @Size(min=2, max=30)
     private String userName;
 
+    @NotNull(message="Can not be null")
    private String email;
 
+    @NotNull(message="Can not be null")
     private String password;
 
     public String getUserName() {

@@ -10,9 +10,12 @@ import com.bridgelabz.bookstore.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,7 +28,11 @@ public class UserController {
     IUserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> registration(@RequestBody UserDto userDto) throws IOException {
+    public ResponseEntity<Response> registration(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws  MethodArgumentNotValidException {
+        if(bindingResult.hasErrors()){
+            System.out.println("hi");
+            throw new MethodArgumentNotValidException(null,bindingResult);
+        }
         Response response=userService.registerUser(userDto);
     return new ResponseEntity<>(response, HttpStatus.OK);
     }

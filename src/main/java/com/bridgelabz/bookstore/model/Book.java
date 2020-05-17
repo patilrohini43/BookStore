@@ -35,6 +35,9 @@ public class Book {
         @Column(name = "image")
         private String image;
 
+        @Column(name="quanity")
+        private int quantity;
+
     @JsonIgnore
     @OneToMany(
             mappedBy = "book",
@@ -65,6 +68,14 @@ public class Book {
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getAuthor() {
