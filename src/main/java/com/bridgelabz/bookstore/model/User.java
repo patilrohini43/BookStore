@@ -34,6 +34,16 @@ public class User {
     )
     private List<Address> addressList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user")
+    private CartDetails CartDetails;
+
+    public com.bridgelabz.bookstore.model.CartDetails getCartDetails() {
+        return CartDetails;
+    }
+
+    public void setCartDetails(com.bridgelabz.bookstore.model.CartDetails cartDetails) {
+        CartDetails = cartDetails;
+    }
 
     public List<Address> getAddressList() {
         return addressList;

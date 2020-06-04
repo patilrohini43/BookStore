@@ -11,7 +11,7 @@ public interface ICart {
 
     Response createCart(String token);
 
-    Response addToCart(Long bookId,Long cartId);
+    Response addToCart(Long bookId,String token);
 
     Response removeFromCart(Long bookId);
 

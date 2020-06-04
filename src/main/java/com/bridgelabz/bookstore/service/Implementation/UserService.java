@@ -38,6 +38,9 @@ public class UserService implements IUserService {
     @Autowired
     private Environment environment;
 
+    @Autowired
+    Email email;
+
 
     @Override
     public Response registerUser(UserDto userDto) {
@@ -48,7 +51,7 @@ public class UserService implements IUserService {
         User user = mapper.map(userDto, User.class);
         userRepository.save(user);
         String url=UserToken.createToken(user.getUserId());
-        Email.sendEmail(userDto.getEmail(),"Verification Mail",url);
+        email.sendEmail(userDto.getEmail(),url);
         Response response=new Response(200, environment.getProperty("user.success.message"));
         return response;
     }

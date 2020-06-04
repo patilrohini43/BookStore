@@ -49,9 +49,12 @@ public class CartService implements ICart {
     }
 
     @Override
-    public Response addToCart(Long bookId,Long cartId) {
+    public Response addToCart(Long bookId,String token) {
+        Long userID = UserToken.tokenVerify(token);
+        User user=userRepository.findById(userID)
+                .orElseThrow(() -> new BookException(401, "token.error"));
         Book book= bookRepository.findById(bookId).orElseThrow(()->new BookException(400,"Book Id Not Found"));
-        CartDetails cartDetails=cartDetailRepository.findById(cartId).orElseThrow(()->new BookException(400,"Cart Id Not Found"));
+        CartDetails cartDetails=cartDetailRepository.findById(user.getCartDetails().getId()).orElseThrow(()->new BookException(400,"Cart Id Not Found"));
         List<Cart> cartBook = cartRepository.findAll().stream().filter(cart -> cart.getBook().getBookId().equals(bookId)).collect(Collectors.toList());
         if(!cartBook.isEmpty()){
             throw new BookException(400,"Book Already Added");

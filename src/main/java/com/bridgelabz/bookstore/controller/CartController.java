@@ -31,8 +31,8 @@ public class CartController {
 
 
     @PostMapping("/addtoCart/{bookId}")
-    public ResponseEntity<Response> addToCart(@PathVariable(name = "bookId") Long bookId,@RequestParam Long cartId) {
-        Response response= cart.addToCart(bookId,cartId);
+    public ResponseEntity<Response> addToCart(@PathVariable(name = "bookId") Long bookId,@RequestHeader("token") String token) {
+        Response response= cart.addToCart(bookId,token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -54,13 +54,13 @@ public class CartController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @GetMapping("/getAllCart")
+    @GetMapping("/getAllCart1")
     public List<Cart> getAllCartList() {
         return cart.getAllCartList();
     }
 
-    @GetMapping("/getAllCart/{token}")
-    public List<CartDetails> getAllCartDetailsList(@PathVariable(name="token") String token) {
+    @GetMapping("/getAllCart")
+    public List<CartDetails> getAllCartDetailsList(@RequestHeader("token") String token) {
         return cart.getAllCartDetailsList(token);
     }
 }

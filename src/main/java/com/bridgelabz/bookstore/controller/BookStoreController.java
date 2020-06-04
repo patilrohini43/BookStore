@@ -35,7 +35,7 @@ public class BookStoreController {
     }
 
     @PostMapping(value = "/addBook")
-    public ResponseEntity<Response> addBook(@ModelAttribute BookDto bookDto,@RequestParam("File") MultipartFile file) throws IOException {
+    public ResponseEntity<Response> addBook(@RequestBody BookDto bookDto,@RequestParam("File") MultipartFile file) throws IOException {
         Response response= iBookService.addBook(bookDto,file);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

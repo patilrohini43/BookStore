@@ -7,6 +7,7 @@ public class BookDto {
     private String bookDetail;
     private int quantity;
 
+
     public String getBookName() {
         return bookName;
     }

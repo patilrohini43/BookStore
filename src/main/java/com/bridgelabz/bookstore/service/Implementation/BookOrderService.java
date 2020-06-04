@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,6 +85,11 @@ public class BookOrderService implements IBookOrderService {
         OrderData orderData=bookOrderRepository.findById(orderId).orElseThrow(() -> new BookException(401, "Order Id Not Found"));
         orderData.setStatus(true);
         bookOrderRepository.save(orderData);
+        CartDetails cart = cartDetailRepository.findById(orderData.getCart().getId()).orElseThrow(() -> new BookException(401, "Cart Id Not Found"));
+        List<Cart> cartItems = cart.getItems();
+        for(Cart cart1:cartItems){
+            cartRepository.delete(cart1);
+        }
         Response response1=new Response(200, environment.getProperty("order.success.message"), Long.toString(orderData.getOrderId()));
         return response1;
     }
